@@ -22,6 +22,7 @@ public class H2ConnectionFactory implements ConnectionFactory {
                 throw new RuntimeException(e);
             }
 
+
         }
         try {
             return DriverManager.getConnection(
