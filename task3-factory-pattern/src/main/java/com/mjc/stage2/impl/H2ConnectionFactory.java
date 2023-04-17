@@ -11,22 +11,27 @@ import java.util.Properties;
 
 public class H2ConnectionFactory implements ConnectionFactory {
     @Override
-    public Connection createConnection() throws IOException, SQLException {
+    public Connection createConnection() {
         Properties pr = new Properties();
         String prFile = "h2database.properties";
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(prFile);
         while (inputStream != null) {
-            pr.load(inputStream);
+            try {
+                pr.load(inputStream);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
         }
-        return DriverManager.getConnection(
-                pr.getProperty("jdbc:h2:~/test"),
-                pr.getProperty("user"),
-                pr.getProperty("password")
-        );
+        try {
+            return DriverManager.getConnection(
+                    pr.getProperty("jdbc:h2:~/test"),
+                    pr.getProperty("user"),
+                    pr.getProperty("password")
+            );
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
-    // Write your code here!
-
-
 }
 
